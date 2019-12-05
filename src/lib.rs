@@ -1,4 +1,4 @@
-#![cfg_attr(feature = "unstable", feature(core_intrinsics))]
+#![cfg_attr(feature = "unstable", feature(core_intrinsics, const_fn))]
 #![no_std]
 
 use core::ops::{
@@ -94,11 +94,12 @@ macro_rules! impl_traits {
 }
 
 impl_traits! {
-    u8, u16, u32, u64,
-    i8, i16, i32, i64,
+    usize, u8, u16, u32, u64,
+    isize, i8, i16, i32, i64,
 }
 
 #[derive(Debug, Copy, Clone)]
+#[repr(transparent)]
 pub struct Unchecked<T>(T);
 
 impl<T> Unchecked<T> {
@@ -108,12 +109,12 @@ impl<T> Unchecked<T> {
     }
 
     #[inline]
-    pub fn value(self) -> T {
+    pub fn into_inner(self) -> T {
         self.0
     }
 
     #[inline]
-    pub fn as_ref(&self) -> &T {
+    pub const fn as_ref(&self) -> &T {
         &self.0
     }
 
@@ -125,6 +126,20 @@ impl<T> Unchecked<T> {
     #[inline]
     pub fn map<F: FnOnce(T) -> T>(self, f: F) -> Self {
         Self(f(self.0))
+    }
+}
+
+impl<T: Copy> Unchecked<T> {
+    #[cfg(feature = "unstable")]
+    #[inline]
+    pub const fn value(self) -> T {
+        self.0
+    }
+
+    #[cfg(not(feature = "unstable"))]
+    #[inline]
+    pub fn value(self) -> T {
+        self.0
     }
 }
 
@@ -276,7 +291,7 @@ impl<T: UncheckedShr> Shr<u32> for Unchecked<T> {
     }
 }
 
-impl<T: BitXor> BitXor for Unchecked<T> {
+impl<T: Copy + BitXor> BitXor for Unchecked<T> {
     type Output = Unchecked<T::Output>;
 
     #[inline]
@@ -285,7 +300,7 @@ impl<T: BitXor> BitXor for Unchecked<T> {
     }
 }
 
-impl<T: BitXor> BitXor<T> for Unchecked<T> {
+impl<T: Copy + BitXor> BitXor<T> for Unchecked<T> {
     type Output = Unchecked<T::Output>;
 
     #[inline]
@@ -294,7 +309,7 @@ impl<T: BitXor> BitXor<T> for Unchecked<T> {
     }
 }
 
-impl<T: BitOr> BitOr for Unchecked<T> {
+impl<T: Copy + BitOr> BitOr for Unchecked<T> {
     type Output = Unchecked<T::Output>;
 
     #[inline]
@@ -303,7 +318,7 @@ impl<T: BitOr> BitOr for Unchecked<T> {
     }
 }
 
-impl<T: BitOr> BitOr<T> for Unchecked<T> {
+impl<T: Copy + BitOr> BitOr<T> for Unchecked<T> {
     type Output = Unchecked<T::Output>;
 
     #[inline]
@@ -312,7 +327,7 @@ impl<T: BitOr> BitOr<T> for Unchecked<T> {
     }
 }
 
-impl<T: BitAnd> BitAnd for Unchecked<T> {
+impl<T: Copy + BitAnd> BitAnd for Unchecked<T> {
     type Output = Unchecked<T::Output>;
 
     #[inline]
@@ -321,7 +336,7 @@ impl<T: BitAnd> BitAnd for Unchecked<T> {
     }
 }
 
-impl<T: BitAnd> BitAnd<T> for Unchecked<T> {
+impl<T: Copy + BitAnd> BitAnd<T> for Unchecked<T> {
     type Output = Unchecked<T::Output>;
 
     #[inline]
