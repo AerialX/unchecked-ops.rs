@@ -99,13 +99,6 @@ pub struct Unchecked<T>(T);
 
 impl<T> Unchecked<T> {
     #[inline]
-    #[cfg(not(feature = "unstable"))]
-    pub unsafe fn new(v: T) -> Self {
-        Self(v)
-    }
-
-    #[inline]
-    #[cfg(feature = "unstable")]
     pub const unsafe fn new(v: T) -> Self {
         Self(v)
     }
