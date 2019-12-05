@@ -1,0 +1,14 @@
+[package]
+name = "unchecked-ops"
+version = "0.1.0"
+edition = "2018"
+
+description = "Unchecked arithmetic"
+categories = ["no-std"]
+
+[dependencies]
+
+[features]
+default = []
+
+unstable = []
