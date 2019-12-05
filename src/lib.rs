@@ -1,7 +1,11 @@
 #![cfg_attr(feature = "unstable", feature(core_intrinsics))]
 #![no_std]
 
-use core::ops::{Add, Sub, Mul, Div, Rem, Shl, Shr, Deref, DerefMut};
+use core::ops::{
+    Add, Sub, Mul, Div, Rem, Shl, Shr,
+    BitXor, BitOr, BitAnd,
+    Deref, DerefMut
+};
 
 #[cfg(feature = "unstable")]
 use core::intrinsics;
@@ -271,3 +275,59 @@ impl<T: UncheckedShr> Shr<u32> for Unchecked<T> {
         })
     }
 }
+
+impl<T: BitXor> BitXor for Unchecked<T> {
+    type Output = Unchecked<T::Output>;
+
+    #[inline]
+    fn bitxor(self, rhs: Self) -> Self::Output {
+        Self(self.value() ^ rhs.value())
+    }
+}
+
+impl<T: BitXor> BitXor<T> for Unchecked<T> {
+    type Output = Unchecked<T::Output>;
+
+    #[inline]
+    fn bitxor(self, rhs: T) -> Self::Output {
+        Self(self.value() ^ rhs)
+    }
+}
+
+impl<T: BitOr> BitOr for Unchecked<T> {
+    type Output = Unchecked<T::Output>;
+
+    #[inline]
+    fn bitor(self, rhs: Self) -> Self::Output {
+        Self(self.value() | rhs.value())
+    }
+}
+
+impl<T: BitOr> BitOr<T> for Unchecked<T> {
+    type Output = Unchecked<T::Output>;
+
+    #[inline]
+    fn bitor(self, rhs: T) -> Self::Output {
+        Self(self.value() | rhs)
+    }
+}
+
+impl<T: BitAnd> BitAnd for Unchecked<T> {
+    type Output = Unchecked<T::Output>;
+
+    #[inline]
+    fn bitand(self, rhs: Self) -> Self::Output {
+        Self(self.value() & rhs.value())
+    }
+}
+
+impl<T: BitAnd> BitAnd<T> for Unchecked<T> {
+    type Output = Unchecked<T::Output>;
+
+    #[inline]
+    fn bitand(self, rhs: T) -> Self::Output {
+        Self(self.value() & rhs)
+    }
+}
+
+// TODO assign variants
