@@ -296,7 +296,7 @@ impl<T: Copy + BitXor> BitXor for Unchecked<T> {
 
     #[inline]
     fn bitxor(self, rhs: Self) -> Self::Output {
-        Self(self.value() ^ rhs.value())
+        Unchecked(self.value() ^ rhs.value())
     }
 }
 
@@ -305,7 +305,7 @@ impl<T: Copy + BitXor> BitXor<T> for Unchecked<T> {
 
     #[inline]
     fn bitxor(self, rhs: T) -> Self::Output {
-        Self(self.value() ^ rhs)
+        Unchecked(self.value() ^ rhs)
     }
 }
 
@@ -314,7 +314,7 @@ impl<T: Copy + BitOr> BitOr for Unchecked<T> {
 
     #[inline]
     fn bitor(self, rhs: Self) -> Self::Output {
-        Self(self.value() | rhs.value())
+        Unchecked(self.value() | rhs.value())
     }
 }
 
@@ -323,7 +323,7 @@ impl<T: Copy + BitOr> BitOr<T> for Unchecked<T> {
 
     #[inline]
     fn bitor(self, rhs: T) -> Self::Output {
-        Self(self.value() | rhs)
+        Unchecked(self.value() | rhs)
     }
 }
 
@@ -332,7 +332,7 @@ impl<T: Copy + BitAnd> BitAnd for Unchecked<T> {
 
     #[inline]
     fn bitand(self, rhs: Self) -> Self::Output {
-        Self(self.value() & rhs.value())
+        Unchecked(self.value() & rhs.value())
     }
 }
 
@@ -341,7 +341,7 @@ impl<T: Copy + BitAnd> BitAnd<T> for Unchecked<T> {
 
     #[inline]
     fn bitand(self, rhs: T) -> Self::Output {
-        Self(self.value() & rhs)
+        Unchecked(self.value() & rhs)
     }
 }
 
