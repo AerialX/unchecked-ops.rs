@@ -1,4 +1,4 @@
-#![cfg_attr(feature = "unstable", feature(core_intrinsics, const_fn))]
+#![cfg_attr(feature = "unstable", feature(core_intrinsics, const_fn_trait_bound))]
 #![no_std]
 
 use core::ops::{
